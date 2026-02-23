@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-namespace QuantityMeasurementApp.Tests;
+﻿namespace QuantityMeasurementApp.Tests;
 
 [TestClass]
 public sealed class FeetTests

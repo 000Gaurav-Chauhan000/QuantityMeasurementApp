@@ -1,6 +1,3 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using QuantityMeasurementApp;
-
 namespace QuantityMeasurementApp.Tests;
 
 [TestClass]
