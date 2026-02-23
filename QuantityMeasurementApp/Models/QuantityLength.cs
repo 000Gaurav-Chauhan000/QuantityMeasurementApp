@@ -2,7 +2,7 @@ using QuantityMeasurementApp.Enums;
 
 namespace QuantityMeasurementApp.Models
 {
-    public  class QuantityLength
+    public class QuantityLength
     {
         private const double Tolerance = 1e-9;
 
@@ -23,16 +23,29 @@ namespace QuantityMeasurementApp.Models
             return Value * Unit.ToFeetFactor();
         }
 
+        public double ConvertTo(LengthUnit targetUnit)
+        {
+            double inFeet = ConvertToFeet();
+            return inFeet / targetUnit.ToFeetFactor();
+        }
+
+        public static double Convert(double value, LengthUnit sourceUnit, LengthUnit targetUnit)
+        {
+            if (double.IsNaN(value) || double.IsInfinity(value))
+                throw new ArgumentException("Value must be a finite number.", nameof(value));
+
+            double inFeet = value * sourceUnit.ToFeetFactor();
+            return inFeet / targetUnit.ToFeetFactor();
+        }
+
+        
         public override bool Equals(object? obj)
         {
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
-
             if (obj is not QuantityLength other) return false;
 
-            double a = ConvertToFeet();
-            double b = other.ConvertToFeet();
-            return Math.Abs(a - b) <= Tolerance;
+            return Math.Abs(ConvertToFeet() - other.ConvertToFeet()) <= Tolerance;
         }
 
         public override int GetHashCode()
