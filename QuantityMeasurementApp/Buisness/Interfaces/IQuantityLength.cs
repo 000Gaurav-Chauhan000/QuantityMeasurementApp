@@ -1,4 +1,5 @@
 using QuantityMeasurementApp.Models;
+using QuantityMeasurementApp.Enums;
 namespace QuantityMeasurementApp.Business.Interfaces
 {
     public interface IQuantityLength

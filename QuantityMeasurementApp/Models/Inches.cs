@@ -11,8 +11,7 @@ namespace QuantityMeasurementApp.Models
                 throw new ArgumentException("Feet values can't be Negative !!");
             }
             Data = data;
-        }
-       
+        }       
 
         public bool Equals(Inches? other)
         {

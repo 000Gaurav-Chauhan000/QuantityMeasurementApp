@@ -1,3 +1,4 @@
+using QuantityMeasurementApp.Enums;
 using QuantityMeasurementApp.Models;
 namespace QuantityMeasurementApp
 {
@@ -16,5 +17,12 @@ namespace QuantityMeasurementApp
             Inches i2 = new Inches(inch2);
             return i1.Equals(i2);
         }
+        public static bool AreLengthsEqual(double v1, LengthUnit u1, double v2, LengthUnit u2)
+        {
+            var q1 = new QuantityLength(v1, u1);
+            var q2 = new QuantityLength(v2, u2);
+            return q1.Equals(q2);
+        }
+
     }
 }
