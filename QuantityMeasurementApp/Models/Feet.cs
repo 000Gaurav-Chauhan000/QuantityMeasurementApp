@@ -2,12 +2,12 @@ namespace QuantityMeasurementApp.Models
 {
     internal class Feet : IEquatable<Feet>
     {
-        public double Data { get; }
+        public double Data { get;}
 
         public Feet(double data)
         {
             if(data < 0)
-            {
+            {  
                 throw new ArgumentException("Feet values can't be Negative !!");
             }
             Data = data;
