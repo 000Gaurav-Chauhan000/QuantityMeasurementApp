@@ -26,6 +26,20 @@ namespace QuantityMeasurementApp.Services
         {
             Console.WriteLine(first + " + " + second + " = " + first.Add(second, targetUnit));
         }
+        public void DemonstrateSubtraction<U>(Quantity<U> first, Quantity<U> second) where U : IMeasurable
+        {
+            Console.WriteLine(first + " - " + second + " = " + first.Subtract(second));
+        }
+
+        public void DemonstrateSubtraction<U>(Quantity<U> first, Quantity<U> second, U targetUnit) where U : IMeasurable
+        {
+            Console.WriteLine(first + " - " + second + " = " + first.Subtract(second, targetUnit));
+        }
+
+        public void DemonstrateDivision<U>(Quantity<U> first, Quantity<U> second) where U : IMeasurable
+        {
+            Console.WriteLine(first + " / " + second + " = " + first.Divide(second));
+        }
 
         public void Run()
         {

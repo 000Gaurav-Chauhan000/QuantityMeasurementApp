@@ -166,20 +166,7 @@ namespace QuantityMeasurementApp.Tests
                 Assert.IsTrue(true);
             }
         }
-        [TestMethod]
-        public void GivenNegativeValue_WhenCreatingQuantity_ShouldThrowArgumentException()
-        {
-            try
-            {
-                Quantity<LengthUnit> q = new Quantity<LengthUnit>(-5, LengthUnit.FEET);
-
-                Assert.Fail("Expected ArgumentException was not thrown.");
-            }
-            catch (ArgumentException)
-            {
-                Assert.IsTrue(true);
-            }
-        }
+       
         [TestMethod]
         public void GivenSameLitres_WhenCompared_ShouldReturnTrue()
         {
@@ -382,6 +369,156 @@ namespace QuantityMeasurementApp.Tests
             Quantity<VolumeUnit> q1 = new Quantity<VolumeUnit>(1, VolumeUnit.LITRE);
 
             Assert.IsTrue(q1.Equals(q1));
+        }
+        [TestMethod]
+        public void GivenTwoLengths_WhenSubtracted_ShouldReturnCorrectResult()
+        {
+            Quantity<LengthUnit> q1 = new Quantity<LengthUnit>(10, LengthUnit.FEET);
+            Quantity<LengthUnit> q2 = new Quantity<LengthUnit>(6, LengthUnit.INCHES);
+
+            Quantity<LengthUnit> result = q1.Subtract(q2);
+
+            Assert.AreEqual(9.5, result.Value);
+            Assert.AreEqual(LengthUnit.FEET, result.Unit);
+        }
+
+        [TestMethod]
+        public void GivenTwoWeights_WhenSubtracted_ShouldReturnCorrectResult()
+        {
+            Quantity<WeightUnit> q1 = new Quantity<WeightUnit>(5, WeightUnit.KILOGRAM);
+            Quantity<WeightUnit> q2 = new Quantity<WeightUnit>(500, WeightUnit.GRAM);
+
+            Quantity<WeightUnit> result = q1.Subtract(q2);
+
+            Assert.AreEqual(4.5, result.Value);
+            Assert.AreEqual(WeightUnit.KILOGRAM, result.Unit);
+        }
+
+        [TestMethod]
+        public void GivenTwoVolumes_WhenSubtractedWithTargetUnit_ShouldReturnCorrectResult()
+        {
+            Quantity<VolumeUnit> q1 = new Quantity<VolumeUnit>(5, VolumeUnit.LITRE);
+            Quantity<VolumeUnit> q2 = new Quantity<VolumeUnit>(2, VolumeUnit.LITRE);
+
+            Quantity<VolumeUnit> result = q1.Subtract(q2, VolumeUnit.MILLILITRE);
+
+            Assert.AreEqual(3000, result.Value);
+            Assert.AreEqual(VolumeUnit.MILLILITRE, result.Unit);
+        }
+
+        [TestMethod]
+        public void GivenEqualQuantities_WhenSubtracted_ShouldReturnZero()
+        {
+            Quantity<LengthUnit> q1 = new Quantity<LengthUnit>(12, LengthUnit.INCHES);
+            Quantity<LengthUnit> q2 = new Quantity<LengthUnit>(1, LengthUnit.FEET);
+
+            Quantity<LengthUnit> result = q1.Subtract(q2);
+
+            Assert.AreEqual(0, result.Value);
+        }
+
+        [TestMethod]
+        public void GivenSmallerFirstQuantity_WhenSubtracted_ShouldReturnNegativeResult()
+        {
+            Quantity<VolumeUnit> q1 = new Quantity<VolumeUnit>(1, VolumeUnit.LITRE);
+            Quantity<VolumeUnit> q2 = new Quantity<VolumeUnit>(2, VolumeUnit.LITRE);
+
+            Quantity<VolumeUnit> result = q1.Subtract(q2);
+
+            Assert.AreEqual(-1, result.Value);
+            Assert.AreEqual(VolumeUnit.LITRE, result.Unit);
+        }
+        [TestMethod]
+        public void GivenTwoEqualWeights_WhenDivided_ShouldReturnOne()
+        {
+            Quantity<WeightUnit> q1 = new Quantity<WeightUnit>(1, WeightUnit.KILOGRAM);
+            Quantity<WeightUnit> q2 = new Quantity<WeightUnit>(1000, WeightUnit.GRAM);
+
+            double result = q1.Divide(q2);
+
+            Assert.AreEqual(1, result);
+        }
+
+        [TestMethod]
+        public void GivenTwoLengths_WhenDivided_ShouldReturnCorrectRatio()
+        {
+            Quantity<LengthUnit> q1 = new Quantity<LengthUnit>(10, LengthUnit.FEET);
+            Quantity<LengthUnit> q2 = new Quantity<LengthUnit>(5, LengthUnit.FEET);
+
+            double result = q1.Divide(q2);
+
+            Assert.AreEqual(2, result);
+        }
+
+        [TestMethod]
+        public void GivenTwoVolumes_WhenDivided_ShouldReturnCorrectRatio()
+        {
+            Quantity<VolumeUnit> q1 = new Quantity<VolumeUnit>(4, VolumeUnit.LITRE);
+            Quantity<VolumeUnit> q2 = new Quantity<VolumeUnit>(2, VolumeUnit.LITRE);
+
+            double result = q1.Divide(q2);
+
+            Assert.AreEqual(2, result);
+        }
+
+        [TestMethod]
+        public void GivenSmallerFirstQuantity_WhenDivided_ShouldReturnLessThanOne()
+        {
+            Quantity<WeightUnit> q1 = new Quantity<WeightUnit>(500, WeightUnit.GRAM);
+            Quantity<WeightUnit> q2 = new Quantity<WeightUnit>(1, WeightUnit.KILOGRAM);
+
+            double result = q1.Divide(q2);
+
+            Assert.AreEqual(0.5, result);
+        }
+        [TestMethod]
+        public void GivenZeroDivisor_WhenDividing_ShouldThrowDivideByZeroException()
+        {
+            try
+            {
+                Quantity<VolumeUnit> q1 = new Quantity<VolumeUnit>(5, VolumeUnit.LITRE);
+                Quantity<VolumeUnit> q2 = new Quantity<VolumeUnit>(0, VolumeUnit.LITRE);
+
+                double result = q1.Divide(q2);
+
+                Assert.Fail("Expected DivideByZeroException was not thrown.");
+            }
+            catch (DivideByZeroException)
+            {
+                Assert.IsTrue(true);
+            }
+        }
+        [TestMethod]
+        public void GivenNullQuantity_WhenSubtracting_ShouldThrowArgumentNullException()
+        {
+            try
+            {
+                Quantity<LengthUnit> q1 = new Quantity<LengthUnit>(5, LengthUnit.FEET);
+
+                Quantity<LengthUnit> result = q1.Subtract(null);
+
+                Assert.Fail("Expected ArgumentNullException was not thrown.");
+            }
+            catch (ArgumentNullException)
+            {
+                Assert.IsTrue(true);
+            }
+        }
+        [TestMethod]
+        public void GivenNullQuantity_WhenDividing_ShouldThrowArgumentNullException()
+        {
+            try
+            {
+                Quantity<WeightUnit> q1 = new Quantity<WeightUnit>(5, WeightUnit.KILOGRAM);
+
+                double result = q1.Divide(null);
+
+                Assert.Fail("Expected ArgumentNullException was not thrown.");
+            }
+            catch (ArgumentNullException)
+            {
+                Assert.IsTrue(true);
+            }
         }
     }
 }
