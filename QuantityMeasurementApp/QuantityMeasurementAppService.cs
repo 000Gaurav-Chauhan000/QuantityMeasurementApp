@@ -1,28 +1,70 @@
+using System;
 using QuantityMeasurementApp.Enums;
 using QuantityMeasurementApp.Models;
-namespace QuantityMeasurementApp
+using QuantityMeasurementApp.Interfaces;
+
+namespace QuantityMeasurementApp.Services
 {
-    public class QuantityMeasurementAppService
+    public class QuantityAppService
     {
-        public static bool AreFeetEqual(double feet1, double feet2)
+        public void DemonstrateEquality<U>(Quantity<U> first, Quantity<U> second) where U : IMeasurable
         {
-            Feet f1 = new Feet(feet1);
-            Feet f2 = new Feet(feet2);
-
-            return f1.Equals(f2);    
-        }
-        public static bool AreInchesEqual(double inch1, double inch2)
-        {
-            Inches i1 = new Inches(inch1);
-            Inches i2 = new Inches(inch2);
-            return i1.Equals(i2);
-        }
-        public static bool AreLengthsEqual(double v1, LengthUnit u1, double v2, LengthUnit u2)
-        {
-            var q1 = new QuantityLength(v1, u1);
-            var q2 = new QuantityLength(v2, u2);
-            return q1.Equals(q2);
+            Console.WriteLine(first + " == " + second + " -> " + first.Equals(second));
         }
 
+        public void DemonstrateConversion<U>(Quantity<U> quantity, U targetUnit) where U : IMeasurable
+        {
+            Console.WriteLine(quantity + " -> " + quantity.ConvertTo(targetUnit));
+        }
+
+        public void DemonstrateAddition<U>(Quantity<U> first, Quantity<U> second) where U : IMeasurable
+        {
+            Console.WriteLine(first + " + " + second + " = " + first.Add(second));
+        }
+
+        public void DemonstrateAddition<U>(Quantity<U> first, Quantity<U> second, U targetUnit) where U : IMeasurable
+        {
+            Console.WriteLine(first + " + " + second + " = " + first.Add(second, targetUnit));
+        }
+
+        public void Run()
+        {
+            Quantity<LengthUnit> length1 = new Quantity<LengthUnit>(12, LengthUnit.INCHES);
+            Quantity<LengthUnit> length2 = new Quantity<LengthUnit>(1, LengthUnit.FEET);
+            Quantity<LengthUnit> length3 = new Quantity<LengthUnit>(2, LengthUnit.YARDS);
+
+            Quantity<WeightUnit> weight1 = new Quantity<WeightUnit>(1000, WeightUnit.GRAM);
+            Quantity<WeightUnit> weight2 = new Quantity<WeightUnit>(1, WeightUnit.KILOGRAM);
+            Quantity<WeightUnit> weight3 = new Quantity<WeightUnit>(2, WeightUnit.POUND);
+
+            Console.WriteLine("Length Equality");
+            DemonstrateEquality(length1, length2);
+
+            Console.WriteLine();
+            Console.WriteLine("Length Conversion");
+            DemonstrateConversion(length3, LengthUnit.FEET);
+
+            Console.WriteLine();
+            Console.WriteLine("Length Addition");
+            DemonstrateAddition(
+                new Quantity<LengthUnit>(2, LengthUnit.FEET),
+                new Quantity<LengthUnit>(24, LengthUnit.INCHES)
+            );
+
+            Console.WriteLine();
+            Console.WriteLine("Weight Equality");
+            DemonstrateEquality(weight1, weight2);
+
+            Console.WriteLine();
+            Console.WriteLine("Weight Conversion");
+            DemonstrateConversion(weight3, WeightUnit.KILOGRAM);
+
+            Console.WriteLine();
+            Console.WriteLine("Weight Addition");
+            DemonstrateAddition(
+                new Quantity<WeightUnit>(2, WeightUnit.KILOGRAM),
+                new Quantity<WeightUnit>(500, WeightUnit.GRAM)
+            );
+        }
     }
 }

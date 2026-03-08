@@ -1,36 +1,45 @@
+using QuantityMeasurementApp.Interfaces;
+
 namespace QuantityMeasurementApp.Enums
 {
-    public enum WeightUnit
+    public sealed class WeightUnit : IMeasurable
     {
-        KILOGRAM,
-        GRAM,
-        POUND
-    }
+        public static readonly WeightUnit KILOGRAM = new WeightUnit("Kilogram", 1.0);
+        public static readonly WeightUnit GRAM = new WeightUnit("Gram", 0.001);
+        public static readonly WeightUnit POUND = new WeightUnit("Pound", 0.453592);
 
-    public static class WeightUnitExtensions
-    {
-        public static double ToKilogramFactor(this WeightUnit unit) => unit switch
+        private readonly string unitName;
+        private readonly double conversionFactor;
+
+        private WeightUnit(string unitName, double conversionFactor)
         {
-            WeightUnit.KILOGRAM => 1.0,
-            WeightUnit.GRAM => 0.001,
-            WeightUnit.POUND => 0.453592,
-            _ => throw new ArgumentOutOfRangeException(nameof(unit), unit, "Unsupported weight unit")
-        };
-
-        public static double ConvertToBaseUnit(this WeightUnit unit, double value)
-        {
-            if (double.IsNaN(value) || double.IsInfinity(value))
-                throw new ArgumentException("Value must be a finite number.", nameof(value));
-
-            return value * unit.ToKilogramFactor();
+            this.unitName = unitName;
+            this.conversionFactor = conversionFactor;
         }
 
-        public static double ConvertFromBaseUnit(this WeightUnit unit, double baseValue)
+        public double GetConversionFactor()
         {
-            if (double.IsNaN(baseValue) || double.IsInfinity(baseValue))
-                throw new ArgumentException("Value must be a finite number.", nameof(baseValue));
+            return conversionFactor;
+        }
 
-            return baseValue / unit.ToKilogramFactor();
+        public double ConvertToBaseUnit(double value)
+        {
+            return value * conversionFactor;
+        }
+
+        public double ConvertFromBaseUnit(double baseValue)
+        {
+            return baseValue / conversionFactor;
+        }
+
+        public string GetUnitName()
+        {
+            return unitName;
+        }
+
+        public override string ToString()
+        {
+            return unitName;
         }
     }
 }

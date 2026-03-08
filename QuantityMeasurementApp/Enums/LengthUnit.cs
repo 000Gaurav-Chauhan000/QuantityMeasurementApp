@@ -1,38 +1,46 @@
+using QuantityMeasurementApp.Interfaces;
+
 namespace QuantityMeasurementApp.Enums
 {
-    public enum LengthUnit
+    public sealed class LengthUnit : IMeasurable
     {
-        FEET,
-        INCHES,
-        YARDS,
-        CENTIMETERS
-    }
+        public static readonly LengthUnit FEET = new LengthUnit("Feet", 1.0);
+        public static readonly LengthUnit INCHES = new LengthUnit("Inches", 1.0 / 12.0);
+        public static readonly LengthUnit YARDS = new LengthUnit("Yards", 3.0);
+        public static readonly LengthUnit CENTIMETERS = new LengthUnit("Centimeters", 1.0 / 30.48);
 
-    public static class LengthUnitExtensions
-    {
-        public static double ToFeetFactor(this LengthUnit unit) => unit switch
+        private readonly string unitName;
+        private readonly double conversionFactor;
+
+        private LengthUnit(string unitName, double conversionFactor)
         {
-            LengthUnit.FEET => 1.0,
-            LengthUnit.INCHES => 1.0 / 12.0,
-            LengthUnit.YARDS => 3.0,
-            LengthUnit.CENTIMETERS => 1.0 / 30.48,
-            _ => throw new ArgumentOutOfRangeException(nameof(unit), unit, "Unsupported unit")
-        };
-
-        public static double ConvertToBaseUnit(this LengthUnit unit, double value)
-        {
-            if (double.IsNaN(value) || double.IsInfinity(value))
-                throw new ArgumentException("Value must be a finite number.", nameof(value));
-
-            return value * unit.ToFeetFactor();
+            this.unitName = unitName;
+            this.conversionFactor = conversionFactor;
         }
 
-        public static double ConvertFromBaseUnit(this LengthUnit unit, double baseValue)
+        public double GetConversionFactor()
         {
-            if (double.IsNaN(baseValue) || double.IsInfinity(baseValue))
-                throw new ArgumentException("Value must be a finite number.", nameof(baseValue));
+            return conversionFactor;
+        }
 
-            return baseValue / unit.ToFeetFactor();
+        public double ConvertToBaseUnit(double value)
+        {
+            return value * conversionFactor;
+        }
+
+        public double ConvertFromBaseUnit(double baseValue)
+        {
+            return baseValue / conversionFactor;
+        }
+
+        public string GetUnitName()
+        {
+            return unitName;
+        }
+
+        public override string ToString()
+        {
+            return unitName;
         }
     }
 }
