@@ -166,7 +166,7 @@ namespace QuantityMeasurementApp.Tests
                 Assert.IsTrue(true);
             }
         }
-       
+
         [TestMethod]
         public void GivenSameLitres_WhenCompared_ShouldReturnTrue()
         {
@@ -516,6 +516,86 @@ namespace QuantityMeasurementApp.Tests
                 Assert.Fail("Expected ArgumentNullException was not thrown.");
             }
             catch (ArgumentNullException)
+            {
+                Assert.IsTrue(true);
+            }
+        }
+        [TestMethod]
+        public void GivenCelsiusAndFahrenheit_WhenCompared_ShouldReturnTrue()
+        {
+            Quantity<TemperatureUnit> q1 = new Quantity<TemperatureUnit>(0, TemperatureUnit.CELSIUS);
+            Quantity<TemperatureUnit> q2 = new Quantity<TemperatureUnit>(32, TemperatureUnit.FAHRENHEIT);
+
+            Assert.IsTrue(q1.Equals(q2));
+        }
+
+        [TestMethod]
+        public void GivenCelsius_WhenConvertedToFahrenheit_ShouldReturnCorrectValue()
+        {
+            Quantity<TemperatureUnit> q1 = new Quantity<TemperatureUnit>(100, TemperatureUnit.CELSIUS);
+
+            Quantity<TemperatureUnit> result = q1.ConvertTo(TemperatureUnit.FAHRENHEIT);
+
+            Assert.AreEqual(212, result.Value);
+            Assert.AreEqual(TemperatureUnit.FAHRENHEIT, result.Unit);
+        }
+        [TestMethod]
+        public void GivenKelvin_WhenConvertedToCelsius_ShouldReturnCorrectValue()
+        {
+            Quantity<TemperatureUnit> q1 = new Quantity<TemperatureUnit>(273.15, TemperatureUnit.KELVIN);
+
+            Quantity<TemperatureUnit> result = q1.ConvertTo(TemperatureUnit.CELSIUS);
+
+            Assert.AreEqual(0, result.Value);
+            Assert.AreEqual(TemperatureUnit.CELSIUS, result.Unit);
+        }
+        [TestMethod]
+        public void GivenTemperature_WhenAdded_ShouldThrowInvalidOperationException()
+        {
+            try
+            {
+                Quantity<TemperatureUnit> q1 = new Quantity<TemperatureUnit>(20, TemperatureUnit.CELSIUS);
+                Quantity<TemperatureUnit> q2 = new Quantity<TemperatureUnit>(10, TemperatureUnit.CELSIUS);
+
+                Quantity<TemperatureUnit> result = q1.Add(q2);
+
+                Assert.Fail("Expected InvalidOperationException was not thrown.");
+            }
+            catch (InvalidOperationException)
+            {
+                Assert.IsTrue(true);
+            }
+        }
+        [TestMethod]
+        public void GivenTemperature_WhenSubtracted_ShouldThrowInvalidOperationException()
+        {
+            try
+            {
+                Quantity<TemperatureUnit> q1 = new Quantity<TemperatureUnit>(20, TemperatureUnit.CELSIUS);
+                Quantity<TemperatureUnit> q2 = new Quantity<TemperatureUnit>(10, TemperatureUnit.CELSIUS);
+
+                Quantity<TemperatureUnit> result = q1.Subtract(q2);
+
+                Assert.Fail("Expected InvalidOperationException was not thrown.");
+            }
+            catch (InvalidOperationException)
+            {
+                Assert.IsTrue(true);
+            }
+        }
+        [TestMethod]
+        public void GivenTemperature_WhenDivided_ShouldThrowInvalidOperationException()
+        {
+            try
+            {
+                Quantity<TemperatureUnit> q1 = new Quantity<TemperatureUnit>(20, TemperatureUnit.CELSIUS);
+                Quantity<TemperatureUnit> q2 = new Quantity<TemperatureUnit>(10, TemperatureUnit.CELSIUS);
+
+                double result = q1.Divide(q2);
+
+                Assert.Fail("Expected InvalidOperationException was not thrown.");
+            }
+            catch (InvalidOperationException)
             {
                 Assert.IsTrue(true);
             }

@@ -32,6 +32,8 @@ namespace QuantityMeasurementApp.Models
             if (targetUnit == null)
                 throw new ArgumentNullException(nameof(targetUnit), "Target unit cannot be null");
 
+            Unit.ValidateOperationSupport("CONVERT");
+
             double baseValue = Unit.ConvertToBaseUnit(Value);
             double convertedValue = targetUnit.ConvertFromBaseUnit(baseValue);
             convertedValue = Math.Round(convertedValue, 2);
@@ -43,6 +45,8 @@ namespace QuantityMeasurementApp.Models
         {
             if (other == null)
                 throw new ArgumentNullException(nameof(other), "Other quantity cannot be null");
+
+            Unit.ValidateOperationSupport(operation.ToString());
 
             double thisBaseValue = Unit.ConvertToBaseUnit(Value);
             double otherBaseValue = other.Unit.ConvertToBaseUnit(other.Value);
@@ -113,6 +117,8 @@ namespace QuantityMeasurementApp.Models
 
             if (Unit.GetType() != other.Unit.GetType())
                 return false;
+
+            Unit.ValidateOperationSupport("EQUALS");
 
             double thisBaseValue = Math.Round(Unit.ConvertToBaseUnit(Value), 6);
             double otherBaseValue = Math.Round(other.Unit.ConvertToBaseUnit(other.Value), 6);
