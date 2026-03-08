@@ -180,5 +180,208 @@ namespace QuantityMeasurementApp.Tests
                 Assert.IsTrue(true);
             }
         }
+        [TestMethod]
+        public void GivenSameLitres_WhenCompared_ShouldReturnTrue()
+        {
+            Quantity<VolumeUnit> q1 = new Quantity<VolumeUnit>(1, VolumeUnit.LITRE);
+            Quantity<VolumeUnit> q2 = new Quantity<VolumeUnit>(1, VolumeUnit.LITRE);
+
+            Assert.IsTrue(q1.Equals(q2));
+        }
+
+        [TestMethod]
+        public void GivenLitreAndMillilitre_WhenCompared_ShouldReturnTrue()
+        {
+            Quantity<VolumeUnit> q1 = new Quantity<VolumeUnit>(1, VolumeUnit.LITRE);
+            Quantity<VolumeUnit> q2 = new Quantity<VolumeUnit>(1000, VolumeUnit.MILLILITRE);
+
+            Assert.IsTrue(q1.Equals(q2));
+        }
+
+        [TestMethod]
+        public void GivenGallonAndLitre_WhenCompared_ShouldReturnTrue()
+        {
+            Quantity<VolumeUnit> q1 = new Quantity<VolumeUnit>(1, VolumeUnit.GALLON);
+            Quantity<VolumeUnit> q2 = new Quantity<VolumeUnit>(3.78541, VolumeUnit.LITRE);
+
+            Assert.IsTrue(q1.Equals(q2));
+        }
+
+        [TestMethod]
+        public void GivenLitre_WhenConvertedToMillilitre_ShouldReturnCorrectValue()
+        {
+            Quantity<VolumeUnit> q1 = new Quantity<VolumeUnit>(1, VolumeUnit.LITRE);
+
+            Quantity<VolumeUnit> result = q1.ConvertTo(VolumeUnit.MILLILITRE);
+
+            Assert.AreEqual(1000, result.Value);
+            Assert.AreEqual(VolumeUnit.MILLILITRE, result.Unit);
+        }
+
+        [TestMethod]
+        public void GivenGallon_WhenConvertedToLitre_ShouldReturnCorrectValue()
+        {
+            Quantity<VolumeUnit> q1 = new Quantity<VolumeUnit>(1, VolumeUnit.GALLON);
+
+            Quantity<VolumeUnit> result = q1.ConvertTo(VolumeUnit.LITRE);
+
+            Assert.AreEqual(3.79, result.Value);
+            Assert.AreEqual(VolumeUnit.LITRE, result.Unit);
+        }
+
+        [TestMethod]
+        public void GivenMillilitre_WhenConvertedToGallon_ShouldReturnCorrectValue()
+        {
+            Quantity<VolumeUnit> q1 = new Quantity<VolumeUnit>(1000, VolumeUnit.MILLILITRE);
+
+            Quantity<VolumeUnit> result = q1.ConvertTo(VolumeUnit.GALLON);
+
+            Assert.AreEqual(0.26, result.Value);
+            Assert.AreEqual(VolumeUnit.GALLON, result.Unit);
+        }
+
+        [TestMethod]
+        public void GivenLitreAndMillilitre_WhenAdded_ShouldReturnCorrectResult()
+        {
+            Quantity<VolumeUnit> q1 = new Quantity<VolumeUnit>(1, VolumeUnit.LITRE);
+            Quantity<VolumeUnit> q2 = new Quantity<VolumeUnit>(1000, VolumeUnit.MILLILITRE);
+
+            Quantity<VolumeUnit> result = q1.Add(q2);
+
+            Assert.AreEqual(2, result.Value);
+            Assert.AreEqual(VolumeUnit.LITRE, result.Unit);
+        }
+
+        [TestMethod]
+        public void GivenGallonAndLitre_WhenAddedWithTargetUnit_ShouldReturnCorrectResult()
+        {
+            Quantity<VolumeUnit> q1 = new Quantity<VolumeUnit>(1, VolumeUnit.GALLON);
+            Quantity<VolumeUnit> q2 = new Quantity<VolumeUnit>(1, VolumeUnit.LITRE);
+
+            Quantity<VolumeUnit> result = q1.Add(q2, VolumeUnit.MILLILITRE);
+
+            Assert.AreEqual(4785.41, result.Value);
+            Assert.AreEqual(VolumeUnit.MILLILITRE, result.Unit);
+        }
+
+        [TestMethod]
+        public void GivenZeroLitreAndZeroMillilitre_WhenCompared_ShouldReturnTrue()
+        {
+            Quantity<VolumeUnit> q1 = new Quantity<VolumeUnit>(0, VolumeUnit.LITRE);
+            Quantity<VolumeUnit> q2 = new Quantity<VolumeUnit>(0, VolumeUnit.MILLILITRE);
+
+            Assert.IsTrue(q1.Equals(q2));
+        }
+
+        [TestMethod]
+        public void GivenVolumeUnit_WhenGettingConversionFactor_ShouldReturnCorrectValue()
+        {
+            Assert.AreEqual(1.0, VolumeUnit.LITRE.GetConversionFactor());
+            Assert.AreEqual(0.001, VolumeUnit.MILLILITRE.GetConversionFactor());
+            Assert.AreEqual(3.78541, VolumeUnit.GALLON.GetConversionFactor());
+        }
+        [TestMethod]
+        public void GivenSameGallons_WhenCompared_ShouldReturnTrue()
+        {
+            Quantity<VolumeUnit> q1 = new Quantity<VolumeUnit>(2, VolumeUnit.GALLON);
+            Quantity<VolumeUnit> q2 = new Quantity<VolumeUnit>(2, VolumeUnit.GALLON);
+
+            Assert.IsTrue(q1.Equals(q2));
+        }
+
+        [TestMethod]
+        public void GivenDifferentLitres_WhenCompared_ShouldReturnFalse()
+        {
+            Quantity<VolumeUnit> q1 = new Quantity<VolumeUnit>(1, VolumeUnit.LITRE);
+            Quantity<VolumeUnit> q2 = new Quantity<VolumeUnit>(2, VolumeUnit.LITRE);
+
+            Assert.IsFalse(q1.Equals(q2));
+        }
+
+        [TestMethod]
+        public void GivenMillilitre_WhenConvertedToLitre_ShouldReturnCorrectValue()
+        {
+            Quantity<VolumeUnit> q1 = new Quantity<VolumeUnit>(1000, VolumeUnit.MILLILITRE);
+
+            Quantity<VolumeUnit> result = q1.ConvertTo(VolumeUnit.LITRE);
+
+            Assert.AreEqual(1, result.Value);
+            Assert.AreEqual(VolumeUnit.LITRE, result.Unit);
+        }
+
+        [TestMethod]
+        public void GivenLitre_WhenConvertedToGallon_ShouldReturnCorrectValue()
+        {
+            Quantity<VolumeUnit> q1 = new Quantity<VolumeUnit>(3.78541, VolumeUnit.LITRE);
+
+            Quantity<VolumeUnit> result = q1.ConvertTo(VolumeUnit.GALLON);
+
+            Assert.AreEqual(1, result.Value);
+            Assert.AreEqual(VolumeUnit.GALLON, result.Unit);
+        }
+
+        [TestMethod]
+        public void GivenTwoLitres_WhenAdded_ShouldReturnCorrectResult()
+        {
+            Quantity<VolumeUnit> q1 = new Quantity<VolumeUnit>(1, VolumeUnit.LITRE);
+            Quantity<VolumeUnit> q2 = new Quantity<VolumeUnit>(2, VolumeUnit.LITRE);
+
+            Quantity<VolumeUnit> result = q1.Add(q2);
+
+            Assert.AreEqual(3, result.Value);
+            Assert.AreEqual(VolumeUnit.LITRE, result.Unit);
+        }
+
+        [TestMethod]
+        public void GivenTwoMillilitres_WhenAdded_ShouldReturnCorrectResult()
+        {
+            Quantity<VolumeUnit> q1 = new Quantity<VolumeUnit>(500, VolumeUnit.MILLILITRE);
+            Quantity<VolumeUnit> q2 = new Quantity<VolumeUnit>(500, VolumeUnit.MILLILITRE);
+
+            Quantity<VolumeUnit> result = q1.Add(q2);
+
+            Assert.AreEqual(1000, result.Value);
+            Assert.AreEqual(VolumeUnit.MILLILITRE, result.Unit);
+        }
+
+        [TestMethod]
+        public void GivenLitreAndMillilitre_WhenAddedWithLitreTarget_ShouldReturnCorrectResult()
+        {
+            Quantity<VolumeUnit> q1 = new Quantity<VolumeUnit>(1, VolumeUnit.LITRE);
+            Quantity<VolumeUnit> q2 = new Quantity<VolumeUnit>(500, VolumeUnit.MILLILITRE);
+
+            Quantity<VolumeUnit> result = q1.Add(q2, VolumeUnit.LITRE);
+
+            Assert.AreEqual(1.5, result.Value);
+            Assert.AreEqual(VolumeUnit.LITRE, result.Unit);
+        }
+
+        [TestMethod]
+        public void GivenGallonAndLitre_WhenAdded_ShouldReturnCorrectResultInFirstUnit()
+        {
+            Quantity<VolumeUnit> q1 = new Quantity<VolumeUnit>(1, VolumeUnit.GALLON);
+            Quantity<VolumeUnit> q2 = new Quantity<VolumeUnit>(3.78541, VolumeUnit.LITRE);
+
+            Quantity<VolumeUnit> result = q1.Add(q2);
+
+            Assert.AreEqual(2, result.Value);
+            Assert.AreEqual(VolumeUnit.GALLON, result.Unit);
+        }
+
+        [TestMethod]
+        public void GivenVolume_WhenComparedWithNull_ShouldReturnFalse()
+        {
+            Quantity<VolumeUnit> q1 = new Quantity<VolumeUnit>(1, VolumeUnit.LITRE);
+
+            Assert.IsFalse(q1.Equals(null));
+        }
+
+        [TestMethod]
+        public void GivenSameReferenceVolume_WhenCompared_ShouldReturnTrue()
+        {
+            Quantity<VolumeUnit> q1 = new Quantity<VolumeUnit>(1, VolumeUnit.LITRE);
+
+            Assert.IsTrue(q1.Equals(q1));
+        }
     }
 }

@@ -65,6 +65,32 @@ namespace QuantityMeasurementApp.Services
                 new Quantity<WeightUnit>(2, WeightUnit.KILOGRAM),
                 new Quantity<WeightUnit>(500, WeightUnit.GRAM)
             );
+            Quantity<VolumeUnit> volume1 = new Quantity<VolumeUnit>(1, VolumeUnit.LITRE);
+            Quantity<VolumeUnit> volume2 = new Quantity<VolumeUnit>(1000, VolumeUnit.MILLILITRE);
+            Quantity<VolumeUnit> volume3 = new Quantity<VolumeUnit>(1, VolumeUnit.GALLON);
+
+            Console.WriteLine();
+            Console.WriteLine("Volume Equality");
+            DemonstrateEquality(volume1, volume2);
+
+            Console.WriteLine();
+            Console.WriteLine("Volume Conversion");
+            DemonstrateConversion(volume3, VolumeUnit.LITRE);
+
+            Console.WriteLine();
+            Console.WriteLine("Volume Addition");
+            DemonstrateAddition(
+                new Quantity<VolumeUnit>(1, VolumeUnit.LITRE),
+                new Quantity<VolumeUnit>(1000, VolumeUnit.MILLILITRE)
+            );
+
+            Console.WriteLine();
+            Console.WriteLine("Volume Addition With Target Unit");
+            DemonstrateAddition(
+                new Quantity<VolumeUnit>(1, VolumeUnit.LITRE),
+                new Quantity<VolumeUnit>(1, VolumeUnit.GALLON),
+                VolumeUnit.MILLILITRE
+            );
         }
     }
 }
