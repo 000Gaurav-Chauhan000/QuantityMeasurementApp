@@ -54,7 +54,7 @@ namespace QuantityMeasurement.Tests
         public void TestConvert_InstanceMethod_YardsToFeet()
         {
             var q = new QuantityLength(1.0, LengthUnit.YARDS);
-            double result = q.ConvertTo(LengthUnit.FEET).Value;
+            double result = q.ConvertTo(LengthUnit.FEET);
             Assert.AreEqual(3.0, result, Eps);
         }
     }
