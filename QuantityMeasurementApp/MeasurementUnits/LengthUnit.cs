@@ -1,17 +1,18 @@
 using QuantityMeasurementApp.Interfaces;
 
-namespace QuantityMeasurementApp.Enums
+namespace QuantityMeasurementApp.MeasurementUnits
 {
-    public sealed class WeightUnit : IMeasurable
+    public sealed class LengthUnit : IMeasurable
     {
-        public static readonly WeightUnit KILOGRAM = new WeightUnit("Kilogram", 1.0);
-        public static readonly WeightUnit GRAM = new WeightUnit("Gram", 0.001);
-        public static readonly WeightUnit POUND = new WeightUnit("Pound", 0.453592);
+        public static readonly LengthUnit FEET = new LengthUnit("Feet", 1.0);
+        public static readonly LengthUnit INCHES = new LengthUnit("Inches", 1.0 / 12.0);
+        public static readonly LengthUnit YARDS = new LengthUnit("Yards", 3.0);
+        public static readonly LengthUnit CENTIMETERS = new LengthUnit("Centimeters", 1.0 / 30.48);
 
         private readonly string unitName;
         private readonly double conversionFactor;
 
-        private WeightUnit(string unitName, double conversionFactor)
+        private LengthUnit(string unitName, double conversionFactor)
         {
             this.unitName = unitName;
             this.conversionFactor = conversionFactor;

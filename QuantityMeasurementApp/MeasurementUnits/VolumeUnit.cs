@@ -1,6 +1,6 @@
 using QuantityMeasurementApp.Interfaces;
 
-namespace QuantityMeasurementApp.Enums
+namespace QuantityMeasurementApp.MeasurementUnits
 {
     public sealed class VolumeUnit : IMeasurable
     {
