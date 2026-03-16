@@ -13,7 +13,6 @@ namespace QuantityMeasurementApp.Interfaces
         {
             return true;
         }
-
         void ValidateOperationSupport(string operation)
         {
             if (!SupportsOperation(operation))
