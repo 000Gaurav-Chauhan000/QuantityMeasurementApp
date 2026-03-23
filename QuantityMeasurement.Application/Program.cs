@@ -1,8 +1,9 @@
-﻿using System;
-using QuantityMeasurementApp.Model.Models;
-using QuantityMeasurementApp.Model.Units;
-using QuantityMeasurement.Application.Services;
+﻿using QuantityMeasurementApp.Repository.Implementations;
+using QuantityMeasurementApp.Repository.Interfaces;
+using QuantityMeasurementApp.Repository.Services;
+using QuantityMeasurement.Model.DTO;
 using QuantityMeasurement.Application.Interfaces;
+using QuantityMeasurement.Application.Services;
 
 namespace QuantityMeasurementApp.Application
 {
@@ -10,8 +11,13 @@ namespace QuantityMeasurementApp.Application
     {
         public static void Main()
         {
-            IMenu menu = new Menu();
+            IQuantityMeasurementRepository repo =
+                new QuantityMeasurementDbRepository();
+
+            var service = new QuantityMeasurementServiceImpl(repo);
+            IMenu menu=new Menu();
             menu.ShowMenu();
+
         }
     }
 }

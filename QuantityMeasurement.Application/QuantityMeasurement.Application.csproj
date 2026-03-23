@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\QuantityMeasurement.Business\QuantityMeasurement.Business.csproj" />
     <ProjectReference Include="..\QuantityMeasurement.Model\QuantityMeasurement.Model.csproj" />
+    <ProjectReference Include="..\QuantityMeasurementApp.Repository\QuantityMeasurementApp.Repository.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

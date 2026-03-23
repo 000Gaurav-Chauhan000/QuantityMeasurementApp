@@ -1,4 +1,4 @@
-using QuantityMeasurement.Model.DTOs;
+using QuantityMeasurement.Model.DTO;
 namespace QuantityMeasurement.Application.Interfaces;
 
 interface IUtility
