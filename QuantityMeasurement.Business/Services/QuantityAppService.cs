@@ -1,111 +1,171 @@
 using System;
 using QuantityMeasurementApp.Model.Units;
-
 using QuantityMeasurementApp.Model.Models;
 using QuantityMeasurementApp.Interfaces;
+using QuantityMeasurement.Model.DTO;
+using QuantityMeasurement.Business.Interfaces;
 
 namespace QuantityMeasurement.Business.Services
 {
-    public class QuantityAppService
+    public class QuantityAppService:IQuantityAppService
     {
+        // ---------------- DEMO METHODS ----------------
+
         public void DemonstrateEquality<U>(Quantity<U> first, Quantity<U> second) where U : IMeasurable
         {
-            Console.WriteLine(first + " == " + second + " -> " + first.Equals(second));
+            Console.WriteLine($"{first} == {second} -> {first.Equals(second)}");
         }
 
         public void DemonstrateConversion<U>(Quantity<U> quantity, U targetUnit) where U : IMeasurable
         {
-            Console.WriteLine(quantity + " -> " + quantity.ConvertTo(targetUnit));
+            Console.WriteLine($"{quantity} -> {quantity.ConvertTo(targetUnit)}");
         }
 
         public void DemonstrateAddition<U>(Quantity<U> first, Quantity<U> second) where U : IMeasurable
         {
-            Console.WriteLine(first + " + " + second + " = " + first.Add(second));
+            Console.WriteLine($"{first} + {second} = {first.Add(second)}");
         }
 
         public void DemonstrateAddition<U>(Quantity<U> first, Quantity<U> second, U targetUnit) where U : IMeasurable
         {
-            Console.WriteLine(first + " + " + second + " = " + first.Add(second, targetUnit));
-        }
-        public void DemonstrateSubtraction<U>(Quantity<U> first, Quantity<U> second) where U : IMeasurable
-        {
-            Console.WriteLine(first + " - " + second + " = " + first.Subtract(second));
+            Console.WriteLine($"{first} + {second} = {first.Add(second, targetUnit)}");
         }
 
-        public void DemonstrateSubtraction<U>(Quantity<U> first, Quantity<U> second, U targetUnit) where U : IMeasurable
+        public void DemonstrateSubtraction<U>(Quantity<U> first, Quantity<U> second) where U : IMeasurable
         {
-            Console.WriteLine(first + " - " + second + " = " + first.Subtract(second, targetUnit));
+            Console.WriteLine($"{first} - {second} = {first.Subtract(second)}");
         }
 
         public void DemonstrateDivision<U>(Quantity<U> first, Quantity<U> second) where U : IMeasurable
         {
-            Console.WriteLine(first + " / " + second + " = " + first.Divide(second));
+            Console.WriteLine($"{first} / {second} = {first.Divide(second)}");
         }
+
+        // ---------------- MAIN RUN ----------------
 
         public void Run()
         {
-            Quantity<LengthUnit> length1 = new Quantity<LengthUnit>(12, LengthUnit.INCHES);
-            Quantity<LengthUnit> length2 = new Quantity<LengthUnit>(1, LengthUnit.FEET);
-            Quantity<LengthUnit> length3 = new Quantity<LengthUnit>(2, LengthUnit.YARDS);
-
-            Quantity<WeightUnit> weight1 = new Quantity<WeightUnit>(1000, WeightUnit.GRAM);
-            Quantity<WeightUnit> weight2 = new Quantity<WeightUnit>(1, WeightUnit.KILOGRAM);
-            Quantity<WeightUnit> weight3 = new Quantity<WeightUnit>(2, WeightUnit.POUND);
+            var length1 = new Quantity<LengthUnit>(12, LengthUnit.INCHES);
+            var length2 = new Quantity<LengthUnit>(1, LengthUnit.FEET);
 
             Console.WriteLine("Length Equality");
             DemonstrateEquality(length1, length2);
+        }
 
-            Console.WriteLine();
-            Console.WriteLine("Length Conversion");
-            DemonstrateConversion(length3, LengthUnit.FEET);
+        // ---------------- BUSINESS METHODS ----------------
 
-            Console.WriteLine();
-            Console.WriteLine("Length Addition");
-            DemonstrateAddition(
-                new Quantity<LengthUnit>(2, LengthUnit.FEET),
-                new Quantity<LengthUnit>(24, LengthUnit.INCHES)
-            );
+        public object Compare(QuantityDTO q1, QuantityDTO q2)
+        {
+            if (q1.Type != q2.Type)
+                throw new Exception("Different types not allowed");
 
-            Console.WriteLine();
-            Console.WriteLine("Weight Equality");
-            DemonstrateEquality(weight1, weight2);
+            return q1.Type switch
+            {
+                "Length" => new Quantity<LengthUnit>(q1.Value, ParseLength(q1.Unit))
+                                .Equals(new Quantity<LengthUnit>(q2.Value, ParseLength(q2.Unit))),
 
-            Console.WriteLine();
-            Console.WriteLine("Weight Conversion");
-            DemonstrateConversion(weight3, WeightUnit.KILOGRAM);
+                "Weight" => new Quantity<WeightUnit>(q1.Value, ParseWeight(q1.Unit))
+                                .Equals(new Quantity<WeightUnit>(q2.Value, ParseWeight(q2.Unit))),
 
-            Console.WriteLine();
-            Console.WriteLine("Weight Addition");
-            DemonstrateAddition(
-                new Quantity<WeightUnit>(2, WeightUnit.KILOGRAM),
-                new Quantity<WeightUnit>(500, WeightUnit.GRAM)
-            );
-            Quantity<VolumeUnit> volume1 = new Quantity<VolumeUnit>(1, VolumeUnit.LITRE);
-            Quantity<VolumeUnit> volume2 = new Quantity<VolumeUnit>(1000, VolumeUnit.MILLILITRE);
-            Quantity<VolumeUnit> volume3 = new Quantity<VolumeUnit>(1, VolumeUnit.GALLON);
+                _ => throw new Exception("Unsupported type")
+            };
+        }
 
-            Console.WriteLine();
-            Console.WriteLine("Volume Equality");
-            DemonstrateEquality(volume1, volume2);
+        public object Convert(QuantityDTO q, string targetUnit)
+        {
+            return q.Type switch
+            {
+                "Length" => new Quantity<LengthUnit>(q.Value, ParseLength(q.Unit))
+                                .ConvertTo(ParseLength(targetUnit)),
 
-            Console.WriteLine();
-            Console.WriteLine("Volume Conversion");
-            DemonstrateConversion(volume3, VolumeUnit.LITRE);
+                "Weight" => new Quantity<WeightUnit>(q.Value, ParseWeight(q.Unit))
+                                .ConvertTo(ParseWeight(targetUnit)),
 
-            Console.WriteLine();
-            Console.WriteLine("Volume Addition");
-            DemonstrateAddition(
-                new Quantity<VolumeUnit>(1, VolumeUnit.LITRE),
-                new Quantity<VolumeUnit>(1000, VolumeUnit.MILLILITRE)
-            );
+                _ => throw new Exception("Unsupported type")
+            };
+        }
 
-            Console.WriteLine();
-            Console.WriteLine("Volume Addition With Target Unit");
-            DemonstrateAddition(
-                new Quantity<VolumeUnit>(1, VolumeUnit.LITRE),
-                new Quantity<VolumeUnit>(1, VolumeUnit.GALLON),
-                VolumeUnit.MILLILITRE
-            );
+        public object Add(QuantityDTO q1, QuantityDTO q2, string targetUnit)
+        {
+            if (q1.Type != q2.Type)
+                throw new Exception("Different types not allowed");
+
+            return q1.Type switch
+            {
+                "Length" => new Quantity<LengthUnit>(q1.Value, ParseLength(q1.Unit))
+                                .Add(new Quantity<LengthUnit>(q2.Value, ParseLength(q2.Unit)),
+                                     ParseLength(targetUnit)),
+
+                "Weight" => new Quantity<WeightUnit>(q1.Value, ParseWeight(q1.Unit))
+                                .Add(new Quantity<WeightUnit>(q2.Value, ParseWeight(q2.Unit)),
+                                     ParseWeight(targetUnit)),
+
+                _ => throw new Exception("Unsupported type")
+            };
+        }
+
+        public object Subtract(QuantityDTO q1, QuantityDTO q2, string targetUnit)
+        {
+            if (q1.Type != q2.Type)
+                throw new Exception("Different types not allowed");
+
+            return q1.Type switch
+            {
+                "Length" => new Quantity<LengthUnit>(q1.Value, ParseLength(q1.Unit))
+                                .Subtract(new Quantity<LengthUnit>(q2.Value, ParseLength(q2.Unit)),
+                                          ParseLength(targetUnit)),
+
+                "Weight" => new Quantity<WeightUnit>(q1.Value, ParseWeight(q1.Unit))
+                                .Subtract(new Quantity<WeightUnit>(q2.Value, ParseWeight(q2.Unit)),
+                                          ParseWeight(targetUnit)),
+
+                _ => throw new Exception("Unsupported type")
+            };
+        }
+
+        public object Divide(QuantityDTO q1, QuantityDTO q2)
+        {
+            if (q1.Type != q2.Type)
+                throw new Exception("Different types not allowed");
+
+            return q1.Type switch
+            {
+                "Length" => new Quantity<LengthUnit>(q1.Value, ParseLength(q1.Unit))
+                                .Divide(new Quantity<LengthUnit>(q2.Value, ParseLength(q2.Unit))),
+
+                "Weight" => new Quantity<WeightUnit>(q1.Value, ParseWeight(q1.Unit))
+                                .Divide(new Quantity<WeightUnit>(q2.Value, ParseWeight(q2.Unit))),
+
+                _ => throw new Exception("Unsupported type")
+            };
+        }
+
+        // ---------------- PARSERS ----------------
+private LengthUnit ParseLength(string unit)
+{
+    return unit.ToLower() switch
+    {
+        "inches" => LengthUnit.INCHES,
+        "feet" => LengthUnit.FEET,
+        "yards" => LengthUnit.YARDS,
+        "centimeters" => LengthUnit.CENTIMETERS,
+        _ => throw new Exception("Invalid Length Unit")
+    };
+}
+ private WeightUnit ParseWeight(string unit)
+{
+    return unit.ToLower() switch
+    {
+        "gram" => WeightUnit.GRAM,
+        "kilogram" => WeightUnit.KILOGRAM,
+        "pound" => WeightUnit.POUND,
+        _ => throw new Exception("Invalid Weight Unit")
+    };
+}
+
+        public void DemonstrateSubtraction<U>(Quantity<U> first, Quantity<U> second, U targetUnit) where U : IMeasurable
+        {
+            throw new NotImplementedException();
         }
     }
 }

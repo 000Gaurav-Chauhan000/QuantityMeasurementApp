@@ -1,12 +1,9 @@
-namespace QuantityMeasurement.Model.DTO;
-
-public class QuantityDTO
+namespace QuantityMeasurement.Model.DTO
 {
-    public double Value { get; set; }
-    public string Unit { get; set; }
-
-    public override string ToString()
+    public class QuantityDTO
     {
-        return $"{Value} {Unit}";
+        public double Value { get; set; }
+        public string Unit { get; set; }
+        public string Type { get; set; } // Length, Weight, Temperature
     }
 }
