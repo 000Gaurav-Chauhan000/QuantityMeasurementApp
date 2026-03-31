@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using QuantityMeasurement.Model.Entities;
 
+
 namespace QuantityMeasurement.Repository
 {
     public class AppDbContext : DbContext
@@ -11,5 +12,6 @@ namespace QuantityMeasurement.Repository
             : base(options)
         {
         }
+        public DbSet<User> Users {get;set;}
     }
 }
